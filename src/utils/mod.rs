@@ -1,9 +1,7 @@
 use crate::payroll::types::EmployeeRecord;
 
-pub fn do_stuff(list: Vec<EmployeeRecord>) {
-    let mut a = list.clone();
-
-    a.sort_by(|a, b| {
+pub fn sort_to_date_id(list: &mut Vec<EmployeeRecord>) {
+    list.sort_by(|a, b| {
         let id = a.employee_id.cmp(&b.employee_id);
 
         if id == std::cmp::Ordering::Equal {
@@ -12,8 +10,6 @@ pub fn do_stuff(list: Vec<EmployeeRecord>) {
             id
         }
     });
-
-    println!("here {:?}", a);
 }
 
 /// Formats date from DD/MM/YYYY to ISO YYYY-MM-DD

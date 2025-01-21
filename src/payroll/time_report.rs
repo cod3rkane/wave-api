@@ -27,7 +27,10 @@ pub async fn time_report(report_id: &str, file: TempFile<'_>) -> Result<Json<Str
         employee_records.push(data);
     }
 
-    utils::do_stuff(employee_records);
+    utils::sort_to_date_id(&mut employee_records);
+
+    println!("here {:?}", employee_records);
+
 
     Ok(Json("CSV Upload".to_string()))
 }
