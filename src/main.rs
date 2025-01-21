@@ -21,7 +21,7 @@ fn rocket() -> _ {
     let config = Config {
         port: 8080,
         address: Ipv4Addr::new(127, 0, 0, 1).into(),
-        temp_dir: "/tmp/config-example".into(),
+        temp_dir: "/tmp/".into(),
         ..Config::debug_default()
     };
     let db = DataBaseClient::init();
