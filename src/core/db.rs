@@ -4,10 +4,12 @@ use mongodb::{
 };
 use std::error::Error;
 use crate::models::report::Report;
+use crate::models::report_file::ReportFile;
 
 #[derive(Debug)]
 pub struct DataBaseClient {
     report_collection: Collection<Report>,
+    report_files: Collection<ReportFile>,
 }
 
 impl DataBaseClient {
@@ -16,10 +18,12 @@ impl DataBaseClient {
         let client = Client::with_uri_str(uri).unwrap();
 
         let database = client.database("payroll");
-        let collection: Collection<Report> = database.collection("employeeReports");
+        let report_collection: Collection<Report> = database.collection("employeeReports");
+        let report_file_collection: Collection<ReportFile> = database.collection("reportFiles");
 
         DataBaseClient {
-            report_collection: collection,
+            report_collection: report_collection,
+            report_files: report_file_collection,
         }
     }
 
