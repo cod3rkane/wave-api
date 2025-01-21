@@ -1,10 +1,13 @@
 #[macro_use]
 extern crate rocket;
 
+use core::db::DataBaseClient;
 use rocket::Config;
 use std::net::Ipv4Addr;
 
-pub mod payroll;
+mod core;
+mod models;
+mod payroll;
 
 use crate::payroll::time_report::{time_report, time_reports};
 
@@ -21,8 +24,10 @@ fn rocket() -> _ {
         temp_dir: "/tmp/config-example".into(),
         ..Config::debug_default()
     };
+    let db = DataBaseClient::init();
 
     rocket::build()
+        .manage(db)
         .mount("/", routes![index, time_report, time_reports])
         .configure(config)
 }

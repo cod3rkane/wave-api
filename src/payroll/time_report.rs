@@ -1,4 +1,7 @@
+use rocket::State;
 use rocket::{http::Status, serde::json::Json};
+
+use crate::core::db::DataBaseClient;
 
 #[put("/payroll/time-report/<report_id>")]
 pub fn time_report(report_id: String) -> &'static str {
@@ -8,6 +11,8 @@ pub fn time_report(report_id: String) -> &'static str {
 }
 
 #[get("/payroll/time-reports")]
-pub fn time_reports() -> Result<Json<String>, Status> {
+pub async fn time_reports(db: &State<DataBaseClient>) -> Result<Json<String>, Status> {
+    let reports = db.list_reports().await;
+
     Ok(Json(String::from("Hello Json Response!")))
 }
