@@ -1,13 +1,12 @@
-use mongodb::bson::DateTime;
-use mongodb::bson::{oid::ObjectId, Decimal128};
+use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct PayPeriod {
     #[serde(rename = "startDate")]
-    pub start_date: DateTime,
+    pub start_date: String,
     #[serde(rename = "endDate")]
-    pub end_date: DateTime,
+    pub end_date: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -19,5 +18,5 @@ pub struct Report {
     #[serde(rename = "payPeriod")]
     pub pay_period: PayPeriod,
     #[serde(rename = "amountPaid")]
-    pub amount_paid: Decimal128,
+    pub amount_paid: String,
 }

@@ -1,5 +1,5 @@
 use mongodb::{
-    bson::{doc},
+    bson::doc,
     sync::{ Client, Collection }
 };
 use std::error::Error;
@@ -23,14 +23,19 @@ impl DataBaseClient {
         }
     }
 
-    pub async fn list_reports(&self) -> Result<String, Box<dyn Error>> {
-        let reports = self.report_collection.find(doc! {}).await;
-        let mut cursor = reports.unwrap();
+    pub async fn list_reports(&self) -> Result<Vec<Report>, Box<dyn Error>> {
+        let query = self.report_collection.find(doc! {}).await;
+        let mut cursor = query.unwrap();
+        let mut reports: Vec<Report> = vec![];
 
         while cursor.advance().await? {
-            println!("here {:?}", cursor.deserialize_current());
+            let mut report = cursor.deserialize_current().unwrap();
+
+            report.amount_paid = "$".to_string() + &report.amount_paid.to_string();
+
+            reports.push(report);
         }
 
-        Ok("Hello".to_string())
+        Ok(reports)
     }
 }
