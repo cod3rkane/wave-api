@@ -1,5 +1,5 @@
 use mongodb::{
-    bson::{Document, doc},
+    bson::{doc},
     sync::{ Client, Collection }
 };
 use std::error::Error;
@@ -24,7 +24,7 @@ impl DataBaseClient {
     }
 
     pub async fn list_reports(&self) -> Result<String, Box<dyn Error>> {
-        let mut reports = self.report_collection.find(doc! {}).await;
+        let reports = self.report_collection.find(doc! {}).await;
         let mut cursor = reports.unwrap();
 
         while cursor.advance().await? {
