@@ -24,29 +24,12 @@ impl DataBaseClient {
     }
 
     pub async fn list_reports(&self) -> Result<String, Box<dyn Error>> {
-        // let reports = self.report_collection.distinct("employeeId", doc! {}).await;
         let mut reports = self.report_collection.find(doc! {}).await;
         let mut cursor = reports.unwrap();
 
         while cursor.advance().await? {
-            println!("here {:?}", cursor.current());
+            println!("here {:?}", cursor.deserialize_current());
         }
-
-        // while let Some(document) = reports.try_next().await {
-        //     println!("here {:?}", document);
-        // }
-
-
-
-        // match reports {
-        //     Ok(cursor) => {
-        //         let res: _ = cursor.collect();
-
-        //         println!("here Reports: {:?}", res);
-        //     },
-        //     Err(_) => {},
-        // };
-
 
         Ok("Hello".to_string())
     }
