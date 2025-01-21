@@ -14,7 +14,7 @@ pub struct PayRollResult {
     pub payroll_report: EmployeeReports,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct EmployeeRecord {
     pub date: String,
     pub hours_worked: String,

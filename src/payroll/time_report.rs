@@ -4,6 +4,7 @@ use rocket::{http::Status, serde::json::Json};
 use csv::ReaderBuilder;
 
 use crate::core::db::DataBaseClient;
+use crate::utils;
 
 use super::types::{EmployeeReports, PayRollResult, EmployeeRecord};
 
@@ -17,18 +18,16 @@ pub async fn time_report(report_id: &str, file: TempFile<'_>) -> Result<Json<Str
     for results in reader.unwrap().records() {
         let record = results.unwrap();
         let data = EmployeeRecord {
-            date: String::from(record.get(0).unwrap()),
-            employee_id: String::from(record.get(1).unwrap()),
-            hours_worked: String::from(record.get(2).unwrap()),
+            date: utils::format_date(&String::from(record.get(0).unwrap())),
+            hours_worked: String::from(record.get(1).unwrap()),
+            employee_id: String::from(record.get(2).unwrap()),
             job_group: String::from(record.get(3).unwrap()),
         };
 
         employee_records.push(data);
     }
 
-    println!("here {:?}", employee_records);
-
-    println!("Report ID: {:?}", report_id);
+    utils::do_stuff(employee_records);
 
     Ok(Json("CSV Upload".to_string()))
 }

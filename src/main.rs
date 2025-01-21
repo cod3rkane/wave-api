@@ -8,6 +8,7 @@ use std::net::Ipv4Addr;
 mod core;
 mod models;
 mod payroll;
+mod utils;
 
 use crate::payroll::time_report::{time_report, time_reports};
 
