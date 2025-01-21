@@ -46,8 +46,10 @@ pub async fn time_report(report_id: &str, file: TempFile<'_>) -> Result<Json<Str
         }
     });
 
+    let res = utils::organize_records_biweekly(list.clone());
 
-    println!("here {:?}", list);
+
+    println!("here {:?}", res);
 
 
     Ok(Json("CSV Upload".to_string()))
