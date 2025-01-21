@@ -13,3 +13,11 @@ pub struct PayRollResult {
     #[serde(rename = "payrollReport")]
     pub payroll_report: EmployeeReports,
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct EmployeeRecord {
+    pub date: String,
+    pub hours_worked: String,
+    pub employee_id: String,
+    pub job_group: String,
+}

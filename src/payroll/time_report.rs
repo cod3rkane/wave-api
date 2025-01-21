@@ -5,24 +5,32 @@ use csv::ReaderBuilder;
 
 use crate::core::db::DataBaseClient;
 
-use super::types::{EmployeeReports, PayRollResult};
-
+use super::types::{EmployeeReports, PayRollResult, EmployeeRecord};
 
 #[post("/payroll/time-report/<report_id>", format ="text/csv", data = "<file>")]
-pub async fn time_report(report_id: &str, file: TempFile<'_>) -> &'static str {
+pub async fn time_report(report_id: &str, file: TempFile<'_>) -> Result<Json<String>, Status> {
     let path = file.path();
     let reader = ReaderBuilder::new().from_path(path.unwrap());
+    let mut employee_records: Vec<EmployeeRecord> = vec![];
 
 
     for results in reader.unwrap().records() {
         let record = results.unwrap();
+        let data = EmployeeRecord {
+            date: String::from(record.get(0).unwrap()),
+            employee_id: String::from(record.get(1).unwrap()),
+            hours_worked: String::from(record.get(2).unwrap()),
+            job_group: String::from(record.get(3).unwrap()),
+        };
 
-        println!("here {:?}", record);
+        employee_records.push(data);
     }
+
+    println!("here {:?}", employee_records);
 
     println!("Report ID: {:?}", report_id);
 
-    "CSV Upload"
+    Ok(Json("CSV Upload".to_string()))
 }
 
 #[get("/payroll/time-reports")]
