@@ -1,5 +1,6 @@
 use crate::payroll::types::EmployeeRecord;
 
+/// Sorts EmployeeRecord by ID and Date ASC
 pub fn sort_to_date_id(list: &mut Vec<EmployeeRecord>) {
     list.sort_by(|a, b| {
         let id = a.employee_id.cmp(&b.employee_id);
