@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use rocket::fs::TempFile;
 use rocket::State;
 use rocket::{http::Status, serde::json::Json};
@@ -29,7 +31,23 @@ pub async fn time_report(report_id: &str, file: TempFile<'_>) -> Result<Json<Str
 
     utils::sort_to_date_id(&mut employee_records);
 
-    println!("here {:?}", employee_records);
+    let mut list: HashMap<String, Vec<EmployeeRecord>> = HashMap::new();
+
+    employee_records.iter().for_each(|e| {
+        match list.get_mut(&e.employee_id) {
+            Some(items) => {
+                items.push(e.clone());
+
+                utils::sort_to_date_id(items);
+            }
+            None => {
+                list.insert(e.employee_id.to_string(), vec![e.clone()]);
+            }
+        }
+    });
+
+
+    println!("here {:?}", list);
 
 
     Ok(Json("CSV Upload".to_string()))

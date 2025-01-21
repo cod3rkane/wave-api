@@ -18,7 +18,12 @@ pub fn format_date(date: &str) -> String {
     let parts: Vec<&str> = date.split('/').collect();
 
     if parts.len() == 3 {
-        format!("{}-{}-{}", parts[2], parts[1], parts[0])
+        format!(
+            "{:4}-{:02}-{:02}",
+            parts[2].parse::<u32>().unwrap(),
+            parts[1].parse::<u32>().unwrap(),
+            parts[0].parse::<u32>().unwrap()
+        )
     } else {
         date.to_string()
     }
