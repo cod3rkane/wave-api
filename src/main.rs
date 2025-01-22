@@ -2,6 +2,7 @@
 extern crate rocket;
 
 use core::db::DataBaseClient;
+use dotenv::dotenv;
 use rocket::Config;
 use std::net::Ipv4Addr;
 
@@ -19,6 +20,8 @@ fn index() -> &'static str {
 
 #[launch]
 fn rocket() -> _ {
+    dotenv().ok();
+
     let config = Config {
         port: 8080,
         address: Ipv4Addr::new(127, 0, 0, 1).into(),

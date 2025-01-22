@@ -9,7 +9,7 @@ See how to install it here: [Rust Get Started page](https://www.rust-lang.org/le
 In the Project directory, you can run:
 
 ### development mode
-> cargo run
+> cargo run dev
 
 ### release mode
 > cargo build --release && cargo run --release

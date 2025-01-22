@@ -1,3 +1,4 @@
+use std::env;
 use mongodb::{
     bson::doc, results::{InsertManyResult, InsertOneResult}, sync::{ Client, Collection }
 };
@@ -12,7 +13,8 @@ pub struct DataBaseClient {
 
 impl DataBaseClient {
     pub fn init() -> Self {
-        let uri = "mongodb://localhost:27017/";
+        let uri = env::var("MONGO_URI").expect("MONGO_URI is not found.");
+        // let uri = "mongodb://localhost:27017/";
         let client = Client::with_uri_str(uri).unwrap();
 
         let database = client.database("payroll");
