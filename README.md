@@ -1,17 +1,17 @@
-# wave-api
+# 🚀 wave-api
 Wave Testing Process
 
 ## Pre-requirements
 You'll need `rust language` to run this project locally.
 See how to install it here: [Rust Get Started page](https://www.rust-lang.org/learn/get-started)
 
-## Available Scripts
+## 🔧 Building and Testing
 In the Project directory, you can run:
 
-### `cargo run`
-Runs the app in the development mode<br>
-This is the fastest way to have the app running.
+### development mode
+> cargo run
 
+### release mode
+> cargo build --release && cargo run --release
 
-### `cargo build`
-Builds the app for production<br>
+<br/>
