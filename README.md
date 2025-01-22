@@ -16,6 +16,19 @@ In the Project directory, you can run:
 
 <br/>
 
+### Database
+I am using MongoDB to store the csv data. You can pull and run `mongodb/mongodb-community-server:latest`
+
+``` shell
+ docker pull mongodb/mongodb-community-server
+ docker run --name mongodb -p 27017:27017 -d mongodb/mongodb-community-server:latest
+```
+And you should be ready to go.
+
+Database Name: payroll
+CollectionA: employeeReports
+CollectionB: reportFiles
+
 #### Curl Example for csv Request
 
 ``` curl-config
