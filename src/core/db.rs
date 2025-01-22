@@ -1,7 +1,6 @@
 use mongodb::{
     bson::doc, results::{InsertManyResult, InsertOneResult}, sync::{ Client, Collection }
 };
-use std::error::Error;
 use crate::models::report::Report;
 use crate::models::report_file::ReportFile;
 
@@ -26,7 +25,7 @@ impl DataBaseClient {
         }
     }
 
-    pub async fn list_reports(&self) -> Result<Vec<Report>, Box<dyn Error>> {
+    pub async fn list_reports(&self) -> mongodb::error::Result<Vec<Report>> {
         let query = self.report_collection.find(doc! {}).await;
         let mut cursor = query.unwrap();
         let mut reports: Vec<Report> = vec![];
@@ -42,8 +41,26 @@ impl DataBaseClient {
         Ok(reports)
     }
 
-    pub async fn insert_reports(&self, report: Vec<Report>) -> Result<InsertManyResult, Box<dyn Error>> {
+    pub async fn insert_reports(&self, report: Vec<Report>) -> mongodb::error::Result<InsertManyResult> {
         let res = self.report_collection.insert_many(report).await?;
+
+        Ok(res)
+    }
+
+    pub async fn find_filename(&self, file_id: &str, filename: &str) -> mongodb::error::Result<Option<ReportFile>> {
+        let res = self.report_files.find_one(doc! { "filename": filename.to_string(), "fileId": file_id.to_string() }).await?;
+
+        Ok(res)
+    }
+
+    pub async fn insert_filename(&self, file_id: &str, filename: &str) -> mongodb::error::Result<InsertOneResult> {
+        let file_report = ReportFile {
+            file_id: file_id.to_string(),
+            filename: filename.to_string(),
+            id: None,
+        };
+
+        let res = self.report_files.insert_one(file_report).await?;
 
         Ok(res)
     }

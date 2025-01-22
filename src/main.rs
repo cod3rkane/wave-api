@@ -1,7 +1,6 @@
 #[macro_use]
 extern crate rocket;
 
-use chrono::prelude::*;
 use core::db::DataBaseClient;
 use rocket::Config;
 use std::net::Ipv4Addr;

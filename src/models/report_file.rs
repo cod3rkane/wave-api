@@ -7,4 +7,6 @@ pub struct ReportFile {
     pub id: Option<ObjectId>,
     #[serde(rename = "filename")]
     pub filename: String,
+    #[serde(rename = "fileId")]
+    pub file_id: String,
 }
