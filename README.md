@@ -21,5 +21,4 @@ In the Project directory, you can run:
 ``` curl-config
 curl --location 'http://127.0.0.1:8080/payroll/time-report/42' \
 --form 'file=@"/home/cod3rkane/Downloads/time-report-42.csv"' \
---form 'save="true"'
 ```
