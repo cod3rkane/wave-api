@@ -25,9 +25,9 @@ I am using MongoDB to store the csv data. You can pull and run `mongodb/mongodb-
 ```
 And you should be ready to go.
 
-Database Name: payroll
-CollectionA: employeeReports
-CollectionB: reportFiles
+Database Name: payroll <br/>
+Collection Name: employeeReports <br/>
+Collection Name: reportFiles <br/>
 
 #### Curl Example for csv Request
 
