@@ -1,11 +1,13 @@
 use std::collections::HashMap;
 
+use chrono::NaiveDate;
 use rocket::fs::TempFile;
 use rocket::State;
 use rocket::{http::Status, serde::json::Json};
 use csv::ReaderBuilder;
 
 use crate::core::db::DataBaseClient;
+use crate::models::report::{PayPeriod, Report};
 use crate::utils;
 
 use super::types::{EmployeeReports, PayRollResult, EmployeeRecord};
@@ -46,11 +48,46 @@ pub async fn time_report(report_id: &str, file: TempFile<'_>) -> Result<Json<Str
         }
     });
 
-    let res = utils::organize_records_biweekly(list.clone());
+    let items = utils::organize_records_biweekly(list.clone());
 
+    // A = 20
+    // B = 30
 
-    println!("here {:?}", res);
+    items.iter().for_each(|(id, dates)| {
+        dates.iter().for_each(|(date, records)| {
+            let parts: Vec<&str> = date.split('-').collect();
+            let year = parts[0].parse::<u32>().unwrap();
+            let month = parts[1].parse::<u32>().unwrap();
+            let end = parts[3].parse::<u32>().unwrap();
+            let start_date = if end <= 15 {
+                format!("{:4}-{:02}-{:02}", year, month, 01)
+            } else {
+                format!("{:4}-{:02}-{:02}", year, month, 16)
+            };
+            let end_date = if end <= 15 {
+                format!("{:4}-{:02}-{:02}", year, month, 15)
+            } else {
+                format!("{:4}-{:02}-{:02}", year, month, 31)
+            };
 
+            let hours_worked: f32 = records.iter().map(|e| e.hours_worked.parse::<f32>().unwrap()).sum();
+            let job_group = records.first().unwrap().job_group.clone();
+
+            let amount_paid = if job_group.eq(&"B") { hours_worked * 30.0 } else { hours_worked * 20.0 };
+
+            let report = Report {
+                amount_paid: amount_paid.to_string(),
+                employee_id: id.to_string(),
+                id: None,
+                pay_period: PayPeriod {
+                    start_date,
+                    end_date,
+                }
+            };
+
+            println!("here Report {:?}", report);
+        });
+    });
 
     Ok(Json("CSV Upload".to_string()))
 }
