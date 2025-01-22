@@ -12,7 +12,7 @@ use crate::utils;
 use super::types::{EmployeeRecord, EmployeeReports, PayRollResult};
 
 #[derive(FromForm)]
-struct Upload<'r> {
+pub struct Upload<'r> {
     file: TempFile<'r>,
 }
 
