@@ -1,6 +1,5 @@
 use mongodb::{
-    bson::doc,
-    sync::{ Client, Collection }
+    bson::doc, results::{InsertManyResult, InsertOneResult}, sync::{ Client, Collection }
 };
 use std::error::Error;
 use crate::models::report::Report;
@@ -41,5 +40,11 @@ impl DataBaseClient {
         }
 
         Ok(reports)
+    }
+
+    pub async fn insert_reports(&self, report: Vec<Report>) -> Result<InsertManyResult, Box<dyn Error>> {
+        let res = self.report_collection.insert_many(report).await?;
+
+        Ok(res)
     }
 }

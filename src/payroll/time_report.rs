@@ -1,6 +1,4 @@
 use std::collections::HashMap;
-
-use chrono::NaiveDate;
 use rocket::fs::TempFile;
 use rocket::State;
 use rocket::{http::Status, serde::json::Json};
@@ -13,7 +11,7 @@ use crate::utils;
 use super::types::{EmployeeReports, PayRollResult, EmployeeRecord};
 
 #[post("/payroll/time-report/<report_id>", format ="text/csv", data = "<file>")]
-pub async fn time_report(report_id: &str, file: TempFile<'_>) -> Result<Json<String>, Status> {
+pub async fn time_report(report_id: &str, file: TempFile<'_>, db: &State<DataBaseClient>) -> Result<Status, Status> {
     let path = file.path();
     let reader = ReaderBuilder::new().from_path(path.unwrap());
     let mut employee_records: Vec<EmployeeRecord> = vec![];
@@ -49,9 +47,7 @@ pub async fn time_report(report_id: &str, file: TempFile<'_>) -> Result<Json<Str
     });
 
     let items = utils::organize_records_biweekly(list.clone());
-
-    // A = 20
-    // B = 30
+    let mut reports: Vec<Report> = vec![];
 
     items.iter().for_each(|(id, dates)| {
         dates.iter().for_each(|(date, records)| {
@@ -85,11 +81,16 @@ pub async fn time_report(report_id: &str, file: TempFile<'_>) -> Result<Json<Str
                 }
             };
 
-            println!("here Report {:?}", report);
+            reports.push(report);
         });
     });
 
-    Ok(Json("CSV Upload".to_string()))
+    let res = db.insert_reports(reports).await;
+
+    match res {
+        Ok(_) => Ok(Status::Created),
+        Err(_) => Err(Status::BadRequest),
+    }
 }
 
 #[get("/payroll/time-reports")]
